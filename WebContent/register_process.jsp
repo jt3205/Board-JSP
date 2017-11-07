@@ -25,7 +25,7 @@
 		PreparedStatement pstmt = null;
 		
 		try{
-			String jdbcDriver = "jdbc:mysql://:3306/Y20112?useUnicode=true&characterEncoding=utf8&useSSL=false&serverTimezone=Asia/Seoul";
+			String jdbcDriver = "jdbc:mysql://gmsgondr:3306/?useUnicode=true&characterEncoding=utf8&useSSL=false&serverTimezone=Asia/Seoul";
 			String dbUser = "";
 			String dbPass = "";
 			
