@@ -1,0 +1,73 @@
+@CHARSET "UTF-8";
+
+*{
+	margin:0px; padding:0px;
+}
+
+/*헤더 관련 css */
+.page-header {
+	padding-bottom: 9px;
+	margin: 40px 15px 20px;
+	border-bottom: 1px solid #eee;
+}
+
+.text-panel{
+	margin-bottom: 20px;
+	background-color: #fff;
+	border: 1px solid transparent;
+	border-radius: 4px;
+	box-shadow: 0 1px 1px rgba(0, 0, 0, .05);
+	border-color: #ddd;
+	margin:10px;
+	width:800px;
+}
+
+.panel-body {
+	padding: 15px;
+}
+.panel-heading {
+	padding: 10px 15px;
+	border-bottom: 1px solid transparent;
+	border-top-left-radius: 3px;
+	border-top-right-radius: 3px;
+	color: #333;
+	background-color: #f5f5f5;
+	border-color: #ddd;
+	box-sizing:border-box;
+	width:100%;
+	white-space: nowrap;
+}
+
+.panel-heading .item {
+	width:50%;
+	display:inline-block;
+	box-sizing:border-box;
+	border:0px;
+}
+
+.panel-heading .item-left {
+	text-align: left;
+}
+
+.panel-heading .item-right {
+	text-align: right;
+}
+
+/*버튼 관련 CSS */
+.btn {
+	margin-left:20px;
+	display: inline-block;
+	padding: 6px 12px;
+	margin-bottom: 0;
+	text-align: center;
+	white-space: nowrap;
+	vertical-align: middle;
+	cursor: pointer;
+	border: 1px solid transparent;
+	border-radius: 4px;
+	color: #333;
+	background-color: #fff;
+	border-color: #ccc;
+	text-decoration:none;
+}
+

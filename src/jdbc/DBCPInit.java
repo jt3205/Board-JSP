@@ -62,10 +62,10 @@ public class DBCPInit extends HttpServlet {
 			pcFactory.setPool(connPool);
 			// 해당 풀을 관리해줄 풀 드라이버를 만들고 거기에 이름과 풀을 연결해줌. 앞으로 gondr 이란 이름을 DB풀에 접근 가능
 			Class.forName("org.apache.commons.dbcp2.PoolingDriver");
-			PoolingDriver pDriver = (PoolingDriver) DriverManager.getDriver("jdbc:apach:commons:dbcp:");
+			PoolingDriver pDriver = (PoolingDriver) DriverManager.getDriver("jdbc:apache:commons:dbcp:");
 			pDriver.registerPool("OrOl", connPool);
 		} catch (Exception e) {
-			throw new RuntimeException(e);
+			e.printStackTrace();
 		}
 	}
 }
