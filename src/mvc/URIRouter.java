@@ -42,6 +42,8 @@ public class URIRouter extends HttpServlet {
 				throw new ServletException(e);
 			}
 		}
+		
+		System.out.println(uriHandlerMap.toString());
 	}
 
 	private void process(HttpServletRequest req, HttpServletResponse res) throws ServletException, IOException {

@@ -1,11 +1,8 @@
 package jdbc;
 
-import java.io.IOException;
-import java.io.PrintWriter;
 import java.sql.DriverManager;
 
 import javax.servlet.ServletException;
-import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 
 import org.apache.commons.dbcp2.ConnectionFactory;
@@ -20,8 +17,7 @@ public class DBCPInit extends HttpServlet {
 	static final String driver = "com.mysql.cj.jdbc.Driver";
 	private final static String ID = "Y20112";
 	private final static String PASSWORD = "1234";
-	static final String URL = "jdbc:mysql://gmsgondr:3306/" + ID
-			+ "?useUnicode=true&characterEncoding=utf8&useSSL=false&serverTimezone=Asia/Seoul";
+	static final String URL = "jdbc:mysql://gondr.iptime.org:3306/" + ID + "?useUnicode=true&characterEncoding=utf8&useSSL=false&serverTimezone=Asia/Seoul";
 
 	@Override
 	public void init() throws ServletException {

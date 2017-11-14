@@ -7,22 +7,7 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 
 public class JdbcUtil {
-	static final String driver = "com.mysql.cj.jdbc.Driver";
-	private final static String ID = "";
-	private final static String PASSWORD = "";
-	static final String url = "jdbc:mysql://gmsgondr.net:3306/"+ ID +"?useUnicode=true&characterEncoding=utf8&useSSL=false&serverTimezone=Asia/Seoul";
-
-	public static Connection getConnection() throws Exception {
-		try {
-			Class.forName(driver);
-			Connection con = DriverManager.getConnection(url, ID, PASSWORD);
-			return con;
-		} catch (Exception e) {
-			e.printStackTrace();
-		}
-		return null;
-	}
-
+	
 	public static void close(Connection conn) {
 		if (conn != null) {
 			try {
@@ -33,32 +18,36 @@ public class JdbcUtil {
 		}
 	}
 
-	public static void close(PreparedStatement pstmt, Connection conn) {
+	public static void close(PreparedStatement pstmt) {
 		if (pstmt != null) {
 			try {
-				if (!pstmt.isClosed())
-					pstmt.close();
-			} catch (Exception e) {
+				pstmt.close();
+			} catch (SQLException e) {
 				e.printStackTrace();
-			} finally {
-				pstmt = null;
 			}
 		}
+		
+	}
+
+	public static void close(ResultSet rs) {
+		if (rs != null) {
+			try {
+				rs.close();
+			} catch (SQLException e) {
+				e.printStackTrace();
+			}
+		}
+	}
+	
+	public static void close(Connection conn, PreparedStatement pstmt) {
+		close(pstmt);
 		close(conn);
 	}
 
-	public static void close(ResultSet rs, PreparedStatement pstmt, Connection con) {
-		if (rs != null) {
-			try {
-				if (!rs.isClosed())
-					rs.close();
-			} catch (Exception e) {
-				e.printStackTrace();
-			} finally {
-				rs = null;
-			}
-		}
-		close(pstmt, con);
+	public static void close(Connection conn, PreparedStatement pstmt, ResultSet rs) {
+		close(conn);
+		close(pstmt);
+		close(rs);
 	}
 
 	public static void rollback(Connection conn) {
