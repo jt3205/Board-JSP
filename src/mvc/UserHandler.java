@@ -70,6 +70,18 @@ public class UserHandler implements URIHandler {
 
 	private String loginUser(HttpServletRequest req, HttpServletResponse res) throws Exception {
 		if (req.getMethod().equalsIgnoreCase("POST")) { // 회원 가입 요청데이터
+			req.setCharacterEncoding("UTF-8");
+			
+			String id = req.getParameter("uid");
+			String pass = req.getParameter("pass1");
+			
+			UserVO user = UserService.getInstance().getUser(id);
+			
+			if(user == null) {
+				req.setAttribute("msg", "해당 유저는 존재하지 않습니다");
+				return "/WEB-INF/view/login.jsp";
+			}
+			req.getSession().setAttribute("lgoin", user);
 			res.sendRedirect("/");
 			return null;
 		} else { // 회원 가입 페이지 요청
