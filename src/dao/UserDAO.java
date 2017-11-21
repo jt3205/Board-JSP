@@ -44,9 +44,9 @@ public class UserDAO {
 			UserVO vo = null;
 			if (rs.next()) {
 				vo = new UserVO();
-				vo.setId(rs.getString("uid"));
-				vo.setName(rs.getString("uname"));
-				vo.setPassword(rs.getString("upw"));
+				vo.setId(rs.getString("id"));
+				vo.setName(rs.getString("name"));
+				vo.setPassword(rs.getString("password"));
 			}
 			return vo;
 		} finally {

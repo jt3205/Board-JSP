@@ -1,43 +1,51 @@
-<%@ page language="java" contentType="text/html; charset=UTF-8"
-    pageEncoding="UTF-8"%>
+<%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
 <html>
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<link rel="stylesheet"
+	href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-beta.2/css/bootstrap.min.css"
+	integrity="sha384-PsH8R72JQ3SOdhVi3uxftmaW6Vc51MKb0q5P2rRUpPvrszuE4W1povHYgTpBfshb"
+	crossorigin="anonymous">
 <title>Insert title here</title>
-<link rel="stylesheet" href="${pageContext.request.contextPath}/public/css/custom.css"/>
+<c:if test="${not empty msg}">
+	<script>
+		var msg = "${msg}";
+		alert(msg);
+	</script>
+	<c:remove var="msg"/>
+</c:if>
 </head>
 <body>
-<h1 class="page-header">글 목록 보기</h1>
-<a href="/board/write.jsp" class='btn'>글 쓰기</a>
-<div>
-	<div class="text-panel">
-		<div class="panel-heading">
-			<div class="item item-left">
-				<span class="left">글쓴이 : 아무개</span>
-			</div>
-			<div class="item item-right">
-				<span class="right">글번호: 2</span>
-			</div>
+<div class="container">
+
+	<div class="row">
+		<div class="col-md-10 col-md-offset-1">
+			<h1>게시판</h1>
+			<table class="table table-striped">
+				<tr>
+					<th>글번호</th><th width="70%">제목</th><th>글쓴이</th><th>날짜</th>
+				</tr>
+				<c:forEach items="${boardList}" var="board">
+					<tr>
+						<td>${board.id}</td>
+						<td>${board.title}</td>
+						<td>${board.writer}</td>
+						<td>${board.date}</td>
+					</tr>
+				</c:forEach>
+			</table>
+			<c:if test="${not empty login}">
+				<a href="/board/write" class="btn btn-primary">글쓰기</a>
+			</c:if>
+			
+			<c:if test="${empty login}">
+				<a href="/user/login" class="btn btn-success">로그인</a>
+				<a href="/user/join" class="btn btn-success">회원가입</a>
+			</c:if>
 		</div>
-		<div class="panel-body">
-			방명록의 글 내용입니다.
-		</div>	
-	</div>
-	<div class="text-panel">
-		<div class="panel-heading">
-			<div class="item item-left">
-				<span class="left">글쓴이 : 아무개</span>
-			</div>
-			<div class="item item-right">
-				<span class="right">글번호 : 1</span>
-			</div>
-		</div>
-		<div class="panel-body">
-			방명록의 글 내용입니다.
-		</div>	
 	</div>
 </div>
-
 </body>
 </html>

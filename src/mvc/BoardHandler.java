@@ -1,7 +1,13 @@
 package mvc;
 
+import java.util.List;
+
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+
+import domain.BoardVO;
+import domain.UserVO;
+import service.BoardService;
 
 public class BoardHandler implements URIHandler {
 	@Override
@@ -40,10 +46,45 @@ public class BoardHandler implements URIHandler {
 	}
 
 	private String listBoard(HttpServletRequest req, HttpServletResponse res) throws Exception {
+		String startParam = req.getParameter("start");
+		String cntParam = req.getParameter("cnt");
+		int start, cnt;
+		
+		start = startParam == null ? 0 : Integer.parseInt(startParam);
+		cnt = cntParam == null ? 5 : Integer.parseInt(cntParam);
+		
+		List<BoardVO> vo = BoardService.getInstance().getList(start, cnt);
+		
+		req.setAttribute("boardList", vo);
+		
 		return "/WEB-INF/view/list.jsp";
 	}
 
 	private String writeBoard(HttpServletRequest req, HttpServletResponse res) throws Exception {
+		if(req.getMethod().equalsIgnoreCase("POST")) {
+			req.setCharacterEncoding("UTF-8");
+			
+			String title = req.getParameter("title");
+			String content = req.getParameter("content");
+			System.out.println(req.getSession());
+			UserVO writer = (UserVO) req.getSession().getAttribute("login");
+			
+			if(writer == null) {
+				req.setAttribute("msg", "로그인한 후에 올 수 있당께!");
+				return "/WEB-INF/view/login.jsp";
+			}
+			String id = writer.getId();
+			BoardVO vo = new BoardVO();
+			vo.setTitle(title);
+			vo.setContent(content);
+			vo.setWriter(id);
+			vo.setDate(new java.sql.Date(new java.util.Date().getTime()));
+			
+			BoardService.getInstance().write(vo);
+			req.getSession().setAttribute("msg", "글 작성 완료");
+			res.sendRedirect("/board/list");
+			return null;
+		}
 		return "/WEB-INF/view/write.jsp";
 	}
 

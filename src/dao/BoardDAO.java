@@ -26,12 +26,12 @@ public class BoardDAO {
 		PreparedStatement pstmt = null;
 		System.out.println(board.getContent());
 		try {
-			pstmt = conn.prepareStatement("INSERT INTO boards(`title`, `writer`, `date`, `content`) VALUES(?, ?, ?, ?)");
+			pstmt = conn.prepareStatement("INSERT INTO Boards(`title`, `writer`, `date`, `content`) VALUES(?, ?, ?, ?)");
 			
 			pstmt.setString(1,board.getTitle());
 			pstmt.setString(2,board.getWriter());
 			pstmt.setDate(3, board.getDate());
-			pstmt.setString(4,board.getContent());
+			pstmt.setString(4, board.getContent());
 			
 			pstmt.executeUpdate();
 		} finally {
@@ -44,16 +44,14 @@ public class BoardDAO {
 		ResultSet rs = null; //SQL결과를 저장할 resultSet
 		List<BoardVO> boards = new ArrayList<BoardVO>(); //Board 객체를 담을 리스트를 만듦
 		try {
-			pstmt = conn.prepareStatement("SELECT * FROM boards ORDER BY id DESC LIMIT ?, ?");
+			pstmt = conn.prepareStatement("SELECT * FROM Boards ORDER BY id DESC LIMIT ?, ?");
 			
 			pstmt.setInt(1, start); //시작지점부터 
 			pstmt.setInt(2, cnt); //몇개
 			
 			rs = pstmt.executeQuery();
-			if(rs.next()){
-				do{
-					boards.add(makeBoardFromRS(rs));
-				}while(rs.next());
+			while(rs.next()){
+				boards.add(makeBoardFromRS(rs));
 			}
 			
 			return boards;

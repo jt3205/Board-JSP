@@ -81,7 +81,7 @@ public class UserHandler implements URIHandler {
 				req.setAttribute("msg", "해당 유저는 존재하지 않습니다");
 				return "/WEB-INF/view/login.jsp";
 			}
-			req.getSession().setAttribute("lgoin", user);
+			req.getSession().setAttribute("login", user);
 			res.sendRedirect("/");
 			return null;
 		} else { // 회원 가입 페이지 요청
