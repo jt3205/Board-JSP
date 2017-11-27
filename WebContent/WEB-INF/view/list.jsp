@@ -3,19 +3,7 @@
 <!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
 <html>
 <head>
-<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
-<link rel="stylesheet"
-	href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-beta.2/css/bootstrap.min.css"
-	integrity="sha384-PsH8R72JQ3SOdhVi3uxftmaW6Vc51MKb0q5P2rRUpPvrszuE4W1povHYgTpBfshb"
-	crossorigin="anonymous">
-<title>Insert title here</title>
-<c:if test="${not empty msg}">
-	<script>
-		var msg = "${msg}";
-		alert(msg);
-	</script>
-	<c:remove var="msg"/>
-</c:if>
+<%@ include file="header.jsp" %>
 </head>
 <body>
 <div class="container">
@@ -30,7 +18,7 @@
 				<c:forEach items="${boardList}" var="board">
 					<tr>
 						<td>${board.id}</td>
-						<td>${board.title}</td>
+						<td><a href="/board/view?id=${board.id}">${board.title}</a></td>
 						<td>${board.writer}</td>
 						<td>${board.date}</td>
 					</tr>

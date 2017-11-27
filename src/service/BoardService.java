@@ -48,4 +48,18 @@ public class BoardService {
 			JdbcUtil.close(conn);
 		}
 	}
+
+	public BoardVO read(int id) {
+		Connection conn = null;
+		try {
+			conn = ConnectionProvider.getConnection();
+			return BoardDAO.getInstance().getBoard(conn, id);
+			
+		} catch (SQLException e) {
+			e.printStackTrace();
+		} finally {
+			JdbcUtil.close(conn);
+		}
+		return null;
+	}
 }

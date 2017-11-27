@@ -1,5 +1,6 @@
 package mvc;
 
+import java.io.IOException;
 import java.util.List;
 
 import javax.servlet.http.HttpServletRequest;
@@ -41,9 +42,12 @@ public class BoardHandler implements URIHandler {
 		case "mod":
 			view = modBoard(req, res);
 			break;
+		case "view":
+			view = viewBoard(req, res);
 		}
 		return view;
 	}
+
 
 	private String listBoard(HttpServletRequest req, HttpServletResponse res) throws Exception {
 		String startParam = req.getParameter("start");
@@ -90,5 +94,22 @@ public class BoardHandler implements URIHandler {
 
 	private String modBoard(HttpServletRequest req, HttpServletResponse res) throws Exception {
 		return "/WEB-INF/view/mod.jsp";
+	}
+	
+
+	private String viewBoard(HttpServletRequest req, HttpServletResponse res) throws IOException {
+		String idParam = req.getParameter("id");
+		int id = idParam == null ? 0 : Integer.parseInt(idParam);
+		
+		if(id > 0) {
+			BoardVO data = BoardService.getInstance().read(id);
+			if(data == null) {
+				req.getSession().setAttribute("msg", "해당글은 존재하지 않습니다.");
+				res.sendRedirect("/board/list");
+				return null;
+			}
+			req.setAttribute("board", data);
+		}
+		return "/WEB-INF/view/view.jsp";
 	}
 }

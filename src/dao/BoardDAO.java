@@ -71,6 +71,16 @@ public class BoardDAO {
 		
 		return board;
 	}
+
+	public BoardVO getBoard(Connection conn, int id) throws SQLException{
+		PreparedStatement pstmt = conn.prepareStatement("select * from boards where id = ?");
+		pstmt.setInt(0, id);
+		ResultSet rs = pstmt.executeQuery();
+		if(rs.next()) { 
+			return makeBoardFromRS(rs);
+		}
+		return null;
+	}
 	
 }
 
