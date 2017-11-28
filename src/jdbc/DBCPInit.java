@@ -14,54 +14,62 @@ import org.apache.commons.pool2.impl.GenericObjectPool;
 import org.apache.commons.pool2.impl.GenericObjectPoolConfig;
 
 public class DBCPInit extends HttpServlet {
-	static final String driver = "com.mysql.cj.jdbc.Driver";
-	private final static String ID = "Y20112";
-	private final static String PASSWORD = "1234";
-	static final String URL = "jdbc:mysql://gondr.iptime.org:3306/" + ID + "?useUnicode=true&characterEncoding=utf8&useSSL=false&serverTimezone=Asia/Seoul";
-
 	@Override
 	public void init() throws ServletException {
-		System.out.println("¼­¹ö ½ÃÀÛÇßÀ½!");
 		loadJDBCDriver();
 		initConnectionPool();
 	}
-
-	private void loadJDBCDriver() {
-		try {
-			Class.forName(driver);
-		} catch (ClassNotFoundException e) {
-			throw new RuntimeException("fail to load JDBC Driver", e);
+	
+	private void loadJDBCDriver(){
+		try{
+			Class.forName("com.mysql.cj.jdbc.Driver");
+		}catch (ClassNotFoundException ex){
+			throw new RuntimeException("fail to load JDBC Driver", ex);
 		}
 	}
-
-	private void initConnectionPool() {
-		try {
-			// ConnectionFactory °´Ã¼¸¦ ¸¸µé¾î¼­ ¿¬°áÀ» »ı¼ºÇÒ ÁØºñ¸¦ ÇÑ´Ù.
-			ConnectionFactory cFactory = new DriverManagerConnectionFactory(URL, ID, PASSWORD);
-			// ¿¬°áÀ» Pool·Î ¸¸µé¾î¼­ °ü¸®ÇØÁÙ PoolableConnectionFactory »ı¼º
-			PoolableConnectionFactory pcFactory = new PoolableConnectionFactory(cFactory, null);
-			// ¿¬°áÀÌ ¿Ã¹Ù¸¥Áö Å×½ºÆ®ÇÒ Äõ¸®·Î SELECT 1À» ¼±¾ğÇØµÒ
+	
+	private void initConnectionPool(){
+		try{
+			String jdbcURL = "jdbc:mysql://gondr.iptime.org:3306/info14?" 
+					+ "useUnicode=true&characterEncoding=utf8&useSSL=false&serverTimezone=Asia/Seoul";
+			String dbUser = "info14";
+			String dbPass = "1234";
+			
+			//ConnectionFactory ê°ì²´ë¥¼ ë§Œë“¤ì–´ì„œ ì—°ê²°ì„ ìƒì„±í•  ì¤€ë¹„ë¥¼ í•œë‹¤.
+			ConnectionFactory cFactory 
+				= new DriverManagerConnectionFactory(jdbcURL, dbUser, dbPass);
+			//ì—°ê²°ì„ Poolë¡œ ë§Œë“¤ì–´ì„œ ê´€ë¦¬í•´ì¤„ PoolableConnectionFactoryìƒì„±
+			PoolableConnectionFactory pcFactory 
+				= new PoolableConnectionFactory(cFactory, null);
+			//ì—°ê²°ì´ ì˜¬ë°”ë¥¸ì§€ í…ŒìŠ¤íŠ¸í•  ì¿¼ë¦¬ë¡œ SELECT 1ì„ ì„ ì–¸í•´ë‘ 
 			pcFactory.setValidationQuery("SELECT 1");
-			GenericObjectPoolConfig poolConfig = new GenericObjectPoolConfig();
-			// ¿¬°á °Ë»çÁÖ±â 5ºĞÀ¸·Î ¼³Á¤
-			poolConfig.setTimeBetweenEvictionRunsMillis(1000L * 60L * 5L);
-			// idle»óÅÂÀÏ¶§ °Ë»ç ½ÇÇà
-			poolConfig.setTestWhileIdle(true);
-			// ¿¬°áÀÇ ÃÖ¼Ò°³¼ö
-			poolConfig.setMinIdle(4);
-			// ¿¬°áÀÇ ÃÖ´ë°³¼ö
-			poolConfig.setMaxTotal(50);
-
-			// À§ÀÇ ¼³Á¤°ªÀ» pcFactory¸¦ ÅëÇØ Ç®À» »ı¼ºÇÔ.
-			GenericObjectPool<PoolableConnection> connPool = new GenericObjectPool<>(pcFactory, poolConfig);
-			// ¸¸µé¾îÁø Ç®À» pcFactory¿¡ ¼³Á¤ÇØÁÜ.
+			
+			GenericObjectPoolConfig poolCfg = new GenericObjectPoolConfig();
+			//ì—°ê²° ê²€ì‚¬ì£¼ê¸° 5ë¶„ìœ¼ë¡œ ì„¤ì •
+			poolCfg.setTimeBetweenEvictionRunsMillis(1000L * 60L * 5L);
+			//idleìƒíƒœì¼ë•Œ ê²€ì‚¬ ì‹¤í–‰
+			poolCfg.setTestWhileIdle(true);
+			//ì—°ê²°ì˜ ìµœì†Œê°œìˆ˜
+			poolCfg.setMinIdle(4);
+			//ì—°ê²°ì˜ ìµœëŒ€ê°œìˆ˜
+			poolCfg.setMaxTotal(50);
+			
+			//ìœ„ì˜ ì„¤ì •ê°’ì„ pcFactoryë¥¼ í†µí•´ í’€ì„ ìƒì„±í•¨.
+			GenericObjectPool<PoolableConnection> connPool 
+				= new GenericObjectPool<>(pcFactory, poolCfg);
+			//ë§Œë“¤ì–´ì§„ í’€ì„ pcFactoryì— ì„¤ì •í•´ì¤Œ.
 			pcFactory.setPool(connPool);
-			// ÇØ´ç Ç®À» °ü¸®ÇØÁÙ Ç® µå¶óÀÌ¹ö¸¦ ¸¸µé°í °Å±â¿¡ ÀÌ¸§°ú Ç®À» ¿¬°áÇØÁÜ. ¾ÕÀ¸·Î gondr ÀÌ¶õ ÀÌ¸§À» DBÇ®¿¡ Á¢±Ù °¡´É
+			
+			//í•´ë‹¹ í’€ì„ ê´€ë¦¬í•´ì¤„ í’€ ë“œë¼ì´ë²„ë¥¼ ë§Œë“¤ê³  ê±°ê¸°ì— ì´ë¦„ê³¼ í’€ì„ ì—°ê²°í•´ì¤Œ. ì•ìœ¼ë¡œ gondr ì´ë€ ì´ë¦„ì„ DBí’€ì— ì ‘ê·¼ ê°€ëŠ¥
 			Class.forName("org.apache.commons.dbcp2.PoolingDriver");
-			PoolingDriver pDriver = (PoolingDriver) DriverManager.getDriver("jdbc:apache:commons:dbcp:");
-			pDriver.registerPool("OrOl", connPool);
-		} catch (Exception e) {
-			e.printStackTrace();
+			PoolingDriver pDriver 
+				= (PoolingDriver)DriverManager.getDriver("jdbc:apache:commons:dbcp:");
+			pDriver.registerPool("gondr", connPool);
+			
+		} catch (Exception ex){
+			throw new RuntimeException(ex);
 		}
 	}
+
 }
+

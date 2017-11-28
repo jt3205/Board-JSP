@@ -21,8 +21,12 @@
 				</div>
 			</div>
 			<a href="/board/list" class="btn btn-success">목록으로</a>
+			<c:if test="${login ne null}">
+				<a href="/board/del?id=${board.id}" class="btn btn-warning">삭제</a>
+			</c:if>
 		</div>
 	</div>
+
 </div>
 </body>
 </html>

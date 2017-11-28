@@ -2,55 +2,60 @@ package service;
 
 import java.sql.Connection;
 
-import dao.UserDAO;
-import domain.UserVO;
+import dao.UserDao;
+import domain.User;
 import jdbc.ConnectionProvider;
 import jdbc.JdbcUtil;
 
 public class UserService {
-	// ½Ì±ÛÅæ ±¸Çö
+	//ì‹±ê¸€í†¤ êµ¬í˜„
 	private static UserService us = new UserService();
-
-	public static UserService getInstance() {
+	
+	public static UserService getInstance()
+	{
 		return us;
 	}
-
-	private UserService() {
+	
+	private UserService()
+	{
+		
 	}
-	// ½Ì±ÛÅæ ±¸Çö ³¡.
-
-	// È¸¿ø°¡ÀÔ ¼­ºñ½º.
-	public int join(UserVO vo) {
+	//ì‹±ê¸€í†¤ êµ¬í˜„ ë.
+	
+	//íšŒì›ê°€ì… ì„œë¹„ìŠ¤.
+	public int join(User user)
+	{
 		Connection conn = null;
 		try {
-			conn = ConnectionProvider.getConnection(); // DB¿¬°á °¡Á®¿À°í
-			// UserVO data = UserDAO.getInstance().selectById(conn, user.getId()); // ÇØ´ç
-			// ¾ÆÀÌµğÀÇ À¯Àú°¡ ÀÖ´ÂÁö Ã£¾Æº¸°í
-			UserDAO dao = UserDAO.getInstance();
-			UserVO data = dao.selectById(conn, vo.getId());
-			if (vo != null) { // È¸¿øÀÌ Á¸ÀçÇÒ°æ¿ì¿¡´Â 0 ¸®ÅÏ
+			conn = ConnectionProvider.getConnection(); //DBì—°ê²° ê°€ì ¸ì˜¤ê³ 
+			User data = UserDao.getInstance().selectById(conn, user.getId()); //í•´ë‹¹ ì•„ì´ë””ì˜ ìœ ì €ê°€ ìˆëŠ”ì§€ ì°¾ì•„ë³´ê³ 
+			
+			if(data != null){ //íšŒì›ì´ ì¡´ì¬í• ê²½ìš°ì—ëŠ” 0 ë¦¬í„´
 				return 0;
 			}
-			dao.insert(conn, vo);
-			// UserDAO.getInstance().insert(conn, vo);
-			return 1; // Á¤»óÀûÀ¸·Î °¡ÀÔ½Ã 1¸®ÅÏ.
-		} catch (Exception e) {
+			
+			UserDao.getInstance().insert(conn, user);
+			return 1; //ì •ìƒì ìœ¼ë¡œ ê°€ì…ì‹œ 1ë¦¬í„´.
+		} catch (Exception e){
 			e.printStackTrace();
-			return -1; // È¸¿ø »ğÀÔ °úÁ¤Áß ¿À·ù ¹ß»ı½Ã¿¡´Â -1 ¸®ÅÏ
+			return -1; //íšŒì› ì‚½ì… ê³¼ì •ì¤‘ ì˜¤ë¥˜ ë°œìƒì‹œì—ëŠ” -1 ë¦¬í„´
 		} finally {
 			JdbcUtil.close(conn);
 		}
 	}
-
-	public UserVO getUser(String id) {
+	
+	//íšŒì› ì •ë³´ ì¡°íšŒ ì„œë¹„ìŠ¤
+	public User getUser(String id)
+	{
 		Connection conn = null;
 		try {
-			conn = ConnectionProvider.getConnection();
-			UserVO data = UserDAO.getInstance().selectById(conn, id);
+			conn = ConnectionProvider.getConnection(); //DBì—°ê²° ê°€ì ¸ì˜¤ê³ 
+			User data = UserDao.getInstance().selectById(conn, id); //í•´ë‹¹ ì•„ì´ë””ì˜ ìœ ì €ê°€ ìˆëŠ”ì§€ ì°¾ì•„ë³´ê³ 
+			
 			return data;
-		} catch (Exception e) {
+		} catch (Exception e){
 			e.printStackTrace();
-			return null;
+			return null; //íšŒì› ì‚½ì… ê³¼ì •ì¤‘ ì˜¤ë¥˜ ë°œìƒì‹œì—ëŠ” null ë¦¬í„´
 		} finally {
 			JdbcUtil.close(conn);
 		}

@@ -2,13 +2,12 @@ package domain;
 
 import java.sql.Date;
 
-public class BoardVO {
+public class Board {
 	private int id;
 	private String title;
 	private String writer;
 	private Date date;
 	private String content;
-	
 	public int getId() {
 		return id;
 	}

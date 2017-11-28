@@ -1,37 +1,36 @@
 package dao;
 
 import java.sql.Connection;
-import java.sql.Date;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 
-import domain.BoardVO;
+import domain.Board;
 import jdbc.JdbcUtil;
 
-public class BoardDAO {
-	private static BoardDAO bd = new BoardDAO();
+public class BoardDao {
+	private static BoardDao bd = new BoardDao();
 	
-	public static BoardDAO getInstance(){
+	public static BoardDao getInstance(){
 		return bd;
 	}
 	
-	private BoardDAO(){
+	private BoardDao(){
 		
 	}
 	
-	public void insert(Connection conn, BoardVO board) throws SQLException {
+	public void insert(Connection conn, Board board) throws SQLException {
 		PreparedStatement pstmt = null;
 		System.out.println(board.getContent());
 		try {
-			pstmt = conn.prepareStatement("INSERT INTO Boards(`title`, `writer`, `date`, `content`) VALUES(?, ?, ?, ?)");
+			pstmt = conn.prepareStatement("INSERT INTO boards(`title`, `writer`, `date`, `content`) VALUES(?, ?, ?, ?)");
 			
 			pstmt.setString(1,board.getTitle());
 			pstmt.setString(2,board.getWriter());
 			pstmt.setDate(3, board.getDate());
-			pstmt.setString(4, board.getContent());
+			pstmt.setString(4,board.getContent());
 			
 			pstmt.executeUpdate();
 		} finally {
@@ -39,19 +38,41 @@ public class BoardDAO {
 		}
 	}
 	
-	public List<BoardVO> getList(Connection conn, int start, int cnt) throws SQLException{
+	public Board getBoard(Connection conn, int id) throws SQLException {
 		PreparedStatement pstmt = null;
-		ResultSet rs = null; //SQL∞·∞˙∏¶ ¿˙¿Â«“ resultSet
-		List<BoardVO> boards = new ArrayList<BoardVO>(); //Board ∞¥√º∏¶ ¥„¿ª ∏ÆΩ∫∆Æ∏¶ ∏∏µÍ
+		ResultSet rs = null; //SQLÍ≤∞Í≥ºÎ•º Ï†ÄÏû•Ìï† resultSet
 		try {
-			pstmt = conn.prepareStatement("SELECT * FROM Boards ORDER BY id DESC LIMIT ?, ?");
-			
-			pstmt.setInt(1, start); //Ω√¿€¡ˆ¡°∫Œ≈Õ 
-			pstmt.setInt(2, cnt); //∏Ó∞≥
+			pstmt = conn.prepareStatement("SELECT * FROM boards WHERE id = ?");
+			pstmt.setInt(1, id);
 			
 			rs = pstmt.executeQuery();
-			while(rs.next()){
-				boards.add(makeBoardFromRS(rs));
+			
+			if(rs.next()){
+				return makeBoardFromRS(rs); //Ï°¥Ïû¨ÌïòÎ©¥ Î¶¨ÌÑ¥
+			}else {
+				return null; //Ï°¥Ïû¨ÌïòÏßÄ ÏïäÏúºÎ©¥ null Î¶¨ÌÑ¥
+			}
+			
+		} finally {
+			JdbcUtil.close(pstmt);
+		}
+	}
+	
+	public List<Board> getList(Connection conn, int start, int cnt) throws SQLException{
+		PreparedStatement pstmt = null;
+		ResultSet rs = null; //SQLÍ≤∞Í≥ºÎ•º Ï†ÄÏû•Ìï† resultSet
+		List<Board> boards = new ArrayList<Board>(); //Board Í∞ùÏ≤¥Î•º Îã¥ÏùÑ Î¶¨Ïä§Ìä∏Î•º ÎßåÎì¶
+		try {
+			pstmt = conn.prepareStatement("SELECT * FROM boards ORDER BY id DESC LIMIT ?, ?");
+			
+			pstmt.setInt(1, start); //ÏãúÏûëÏßÄÏ†êÎ∂ÄÌÑ∞ 
+			pstmt.setInt(2, cnt); //Î™áÍ∞ú
+			
+			rs = pstmt.executeQuery();
+			if(rs.next()){
+				do{
+					boards.add(makeBoardFromRS(rs));
+				}while(rs.next());
 			}
 			
 			return boards;
@@ -61,8 +82,8 @@ public class BoardDAO {
 		}
 	}
 	
-	private BoardVO makeBoardFromRS(ResultSet rs) throws SQLException{
-		BoardVO board = new BoardVO();
+	private Board makeBoardFromRS(ResultSet rs) throws SQLException{
+		Board board = new Board();
 		board.setId(rs.getInt("id"));
 		board.setTitle(rs.getString("title"));
 		board.setWriter(rs.getString("writer"));
@@ -71,16 +92,43 @@ public class BoardDAO {
 		
 		return board;
 	}
-
-	public BoardVO getBoard(Connection conn, int id) throws SQLException{
-		PreparedStatement pstmt = conn.prepareStatement("select * from boards where id = ?");
-		pstmt.setInt(0, id);
-		ResultSet rs = pstmt.executeQuery();
-		if(rs.next()) { 
-			return makeBoardFromRS(rs);
+	
+	public int deleteBoard(Connection conn, int id) throws SQLException{
+		PreparedStatement pstmt = null;
+		try {
+			pstmt = conn.prepareStatement("DELETE FROM boards WHERE id = ?");
+			
+			pstmt.setInt(1, id);
+			
+			pstmt.executeUpdate();
+			
+			return 1;
+		} catch (Exception e){
+			e.printStackTrace();
+			return -1;
+		} finally {
+			JdbcUtil.close(pstmt);
 		}
-		return null;
+	}
+	
+	public int getTotalCnt(Connection conn) throws SQLException{
+		PreparedStatement pstmt = null;
+		ResultSet rs = null;
+		try {
+			pstmt = conn.prepareStatement("SELECT count(*) as cnt FROM boards");
+			
+			rs = pstmt.executeQuery();
+			if(rs.next()){
+				return rs.getInt("cnt");
+			}else {
+				return -1;
+			}
+		}catch (Exception e){
+			e.printStackTrace();
+			return -1;
+		}finally {
+			JdbcUtil.close(pstmt);
+		}
 	}
 	
 }
-

@@ -1,6 +1,6 @@
 package domain;
 
-public class UserVO {
+public class User {
 	private String id;
 	private String name;
 	private String password;
@@ -23,5 +23,4 @@ public class UserVO {
 	public void setPassword(String password) {
 		this.password = password;
 	}
-	
 }
