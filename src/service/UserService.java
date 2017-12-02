@@ -2,7 +2,7 @@ package service;
 
 import java.sql.Connection;
 
-import dao.UserDao;
+import dao.UserDAO;
 import domain.User;
 import jdbc.ConnectionProvider;
 import jdbc.JdbcUtil;
@@ -28,13 +28,13 @@ public class UserService {
 		Connection conn = null;
 		try {
 			conn = ConnectionProvider.getConnection(); //DB연결 가져오고
-			User data = UserDao.getInstance().selectById(conn, user.getId()); //해당 아이디의 유저가 있는지 찾아보고
+			User data = UserDAO.getInstance().selectById(conn, user.getId()); //해당 아이디의 유저가 있는지 찾아보고
 			
 			if(data != null){ //회원이 존재할경우에는 0 리턴
 				return 0;
 			}
 			
-			UserDao.getInstance().insert(conn, user);
+			UserDAO.getInstance().insert(conn, user);
 			return 1; //정상적으로 가입시 1리턴.
 		} catch (Exception e){
 			e.printStackTrace();
@@ -50,7 +50,7 @@ public class UserService {
 		Connection conn = null;
 		try {
 			conn = ConnectionProvider.getConnection(); //DB연결 가져오고
-			User data = UserDao.getInstance().selectById(conn, id); //해당 아이디의 유저가 있는지 찾아보고
+			User data = UserDAO.getInstance().selectById(conn, id); //해당 아이디의 유저가 있는지 찾아보고
 			
 			return data;
 		} catch (Exception e){

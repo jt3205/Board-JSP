@@ -10,14 +10,14 @@ import java.util.List;
 import domain.Board;
 import jdbc.JdbcUtil;
 
-public class BoardDao {
-	private static BoardDao bd = new BoardDao();
+public class BoardDAO {
+	private static BoardDAO bd = new BoardDAO();
 	
-	public static BoardDao getInstance(){
+	public static BoardDAO getInstance(){
 		return bd;
 	}
 	
-	private BoardDao(){
+	private BoardDAO(){
 		
 	}
 	

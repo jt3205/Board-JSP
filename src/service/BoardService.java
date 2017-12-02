@@ -3,7 +3,7 @@ package service;
 import java.sql.Connection;
 import java.util.List;
 
-import dao.BoardDao;
+import dao.BoardDAO;
 import domain.Board;
 import jdbc.ConnectionProvider;
 import jdbc.JdbcUtil;
@@ -25,7 +25,7 @@ public class BoardService {
 		try {
 			conn = ConnectionProvider.getConnection();
 			
-			List<Board> list = BoardDao.getInstance().getList(conn, start, cnt);
+			List<Board> list = BoardDAO.getInstance().getList(conn, start, cnt);
 			
 			return list;
 		} catch (Exception e){
@@ -42,7 +42,7 @@ public class BoardService {
 		
 		try {
 			conn = ConnectionProvider.getConnection();
-			BoardDao.getInstance().insert(conn, data); //데이터 삽입
+			BoardDAO.getInstance().insert(conn, data); //데이터 삽입
 			return 1;
 		} catch(Exception e)
 		{
@@ -58,7 +58,7 @@ public class BoardService {
 		Connection conn = null;
 		try {
 			conn = ConnectionProvider.getConnection();
-			Board data = BoardDao.getInstance().getBoard(conn, id);
+			Board data = BoardDAO.getInstance().getBoard(conn, id);
 			return data;
 		} catch (Exception e){
 			e.printStackTrace();
@@ -73,7 +73,7 @@ public class BoardService {
 		
 		try {
 			conn = ConnectionProvider.getConnection();
-			return BoardDao.getInstance().deleteBoard(conn, id);
+			return BoardDAO.getInstance().deleteBoard(conn, id);
 		} catch (Exception e){
 			e.printStackTrace();
 			return -1;
@@ -87,7 +87,7 @@ public class BoardService {
 		
 		try  {
 			conn = ConnectionProvider.getConnection();
-			return BoardDao.getInstance().getTotalCnt(conn);
+			return BoardDAO.getInstance().getTotalCnt(conn);
 		} catch (Exception e){
 			e.printStackTrace();
 			return -1;

@@ -9,15 +9,15 @@ import domain.User;
 import jdbc.JdbcUtil;
 
 
-public class UserDao {
+public class UserDAO {
 	//싱글톤 방식으로 선언해서 요청시마다 인스턴스가 생기는 것을 방지함.
-	private static UserDao ud = new UserDao(); 
+	private static UserDAO ud = new UserDAO(); 
 	
-	public static UserDao getInstance(){
+	public static UserDAO getInstance(){
 		return ud;
 	}
 	
-	private UserDao(){
+	private UserDAO(){
 		//생성자는 아무것도 없는 private로 선언하여 외부 생성이 불가능하게 한다. 
 		//이는 다른 인스턴스는 생성될 수 없도록 막아주고 해당 객체를 싱글톤으로 만들어준다.
 	}
